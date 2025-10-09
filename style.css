@@ -1,0 +1,135 @@
+/* ========== IWF CRM v9 — Stil principal ========== */
+
+:root {
+  --brand: #a62091;
+  --bg: #f6f4f8;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --line: #e5e7eb;
+  --shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+/* Structură generală */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+/* Login */
+.login {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1b1f, #2c2d35);
+  color: white;
+}
+
+.login-box {
+  text-align: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 24px 40px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  backdrop-filter: blur(8px);
+}
+
+.login-box input {
+  display: block;
+  width: 220px;
+  margin: 10px auto;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  text-align: center;
+}
+
+.btn {
+  background: var(--brand);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255,255,255,.4);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  margin: 10px auto;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Aplicație principală */
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: white;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.brand {
+  font-weight: 800;
+  color: var(--brand);
+  padding: 20px;
+  border-bottom: 1px solid var(--line);
+  font-size: 18px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.nav button {
+  padding: 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-weight: 700;
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.nav button:hover,
+.nav button.active {
+  background: var(--brand);
+  color: white;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
