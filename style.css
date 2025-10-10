@@ -1,18 +1,17 @@
 /* ==============================
-   IWF CRM v9 - Stil complet (tema #a62091)
+   IWF CRM v9 - Tema completă (#a62091)
    ============================== */
 
-/* Variabile principale */
 :root {
   --brand: #a62091;
-  --bg: #f6f4f8;
+  --bg: #f8f6fa;
   --card: #ffffff;
   --muted: #6b7280;
   --ink: #1f2937;
   --line: #e5e7eb;
 }
 
-/* Reset și fonturi */
+/* ====== GLOBAL ====== */
 body {
   margin: 0;
   background: var(--bg);
@@ -26,32 +25,34 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a1b1f, #2c2d35);
+  background: linear-gradient(135deg, #a62091, #5c2d91);
   color: white;
 }
 
 .login-box {
-  background: rgba(255,255,255,0.08);
-  padding: 30px 50px;
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 40px 60px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,.3);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
 }
 
 .login-box h1 {
-  font-size: 26px;
+  font-size: 28px;
   margin-bottom: 10px;
+  color: #fff;
 }
 
 .login-box input {
   display: block;
-  width: 240px;
-  margin: 8px auto;
-  padding: 8px;
+  width: 260px;
+  margin: 10px auto;
+  padding: 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   text-align: center;
+  font-size: 15px;
 }
 
 .btn {
@@ -59,10 +60,10 @@ body {
   border: none;
   color: #fff;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
+  font-weight: 600;
+  transition: 0.25s;
 }
 
 .btn:hover {
@@ -70,9 +71,9 @@ body {
 }
 
 .spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(255,255,255,.4);
+  width: 26px;
+  height: 26px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-top: 3px solid #fff;
   border-radius: 50%;
   margin: 10px auto;
@@ -81,10 +82,12 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* ===== APP STRUCTURE ===== */
+/* ===== APP LAYOUT ===== */
 .app {
   display: flex;
   height: 100vh;
@@ -96,18 +99,29 @@ body {
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .brand {
   text-align: center;
-  padding: 20px 10px;
+  padding: 24px 12px 18px;
   border-bottom: 1px solid var(--line);
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 .brand h2 {
   color: var(--brand);
-  margin: 6px 0 4px;
+  margin: 8px 0 4px;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .brand .muted {
@@ -115,22 +129,19 @@ body {
   color: var(--muted);
 }
 
-.logo {
-  width: 60px;
-  margin-bottom: 8px;
-}
-
 .nav {
   display: flex;
   flex-direction: column;
   padding: 12px;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .nav button {
   border: none;
   background: none;
   text-align: left;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 8px;
   color: var(--muted);
   font-weight: 600;
@@ -143,31 +154,33 @@ body {
 .nav button.active {
   background: var(--brand);
   color: white;
+  box-shadow: 0 3px 8px rgba(166, 32, 145, 0.3);
 }
 
-/* ===== CONTENT ===== */
+/* ===== MAIN CONTENT ===== */
 .content {
   flex: 1;
-  padding: 24px;
+  padding: 32px;
+  margin-left: 260px;
   overflow-y: auto;
 }
 
 .card {
   background: var(--card);
-  border-radius: 14px;
-  box-shadow: 0 6px 14px rgba(0,0,0,.08);
-  padding: 20px;
-  margin-bottom: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  padding: 24px 28px;
+  margin-bottom: 24px;
 }
 
-/* Tabel simplu */
+/* ===== TABLES & TEXT ===== */
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
 table th, table td {
-  padding: 10px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--line);
   text-align: left;
 }
@@ -177,27 +190,50 @@ table th {
   font-weight: 700;
 }
 
-/* Badge-uri, etichete, etc. */
+h2 {
+  margin-top: 0;
+  color: var(--ink);
+}
+
+p {
+  margin: 8px 0;
+  color: var(--muted);
+}
+
+/* ===== BADGES ===== */
 .badge {
   display: inline-block;
   padding: 4px 8px;
   border-radius: 6px;
-  background: #f1f1f1;
+  background: #f3f4f6;
   font-size: 12px;
 }
 
-.badge.success { background: #d1fae5; color: #065f46; }
-.badge.warn { background: #fef3c7; color: #92400e; }
-.badge.danger { background: #fee2e2; color: #991b1b; }
+.badge.success {
+  background: #d1fae5;
+  color: #065f46;
+}
 
-/* Scrollbar */
+.badge.warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ===== SCROLL ===== */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 6px;
+  background: #c7c7c7;
+  border-radius: 8px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #aaa;
 }
