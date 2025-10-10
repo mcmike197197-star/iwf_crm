@@ -4,38 +4,55 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IWF CRM v9 — Recrutare Globală</title>
-  <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- LOGIN SCREEN -->
   <section id="login" class="login">
     <div class="login-box">
       <h1>International Work Finder</h1>
       <p>CRM — Recrutare Globală</p>
-      <input type="email" id="email" placeholder="manager@iwf.local">
-      <input type="password" id="password" placeholder="Parolă">
+      <input type="email" id="email" placeholder="manager@iwf.local" />
+      <input type="password" id="password" placeholder="Parolă" />
       <button id="btn-enter" class="btn">Autentificare (demo)</button>
       <div id="spinner" class="spinner"></div>
+      <p class="muted small">Demo local — datele nu sunt trimise nicăieri</p>
     </div>
   </section>
 
-  <section id="app" class="app">
+  <!-- MAIN APP -->
+  <section id="app" class="app" style="display:none">
     <aside class="sidebar">
-      <div class="brand">IWF CRM v9</div>
+      <div class="brand">
+        <img src="assets/logo.svg" alt="IWF" class="logo">
+        <h2>IWF CRM v9</h2>
+        <p class="muted">Recrutare Globală</p>
+      </div>
       <nav class="nav">
         <button data-view="dashboard" class="active">Panou principal</button>
         <button data-view="candidates">Candidați</button>
         <button data-view="clients">Clienți</button>
         <button data-view="orders">Comenzi</button>
-        <button data-view="requests">Cereri</button>
+        <button data-view="requests">Cereri interne</button>
         <button data-view="reports">Rapoarte</button>
         <button data-view="settings">Setări</button>
       </nav>
     </aside>
-    <main class="content" id="content">
-      <div class="card"><h2>Bun venit!</h2><p>Selectează o secțiune din meniu.</p></div>
+
+    <main class="content">
+      <div id="main-content" class="card">
+        <h2>Bun venit!</h2>
+        <p>Alege o secțiune din meniu pentru a începe.</p>
+      </div>
     </main>
   </section>
 
+  <!-- JS MODULES -->
   <script src="js/app.js"></script>
+  <script src="js/candidates.js"></script>
+  <script src="js/clients.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/requests.js"></script>
+  <script src="js/reports.js"></script>
 </body>
 </html>
