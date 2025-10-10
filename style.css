@@ -1,16 +1,18 @@
-/* ========== IWF CRM v9 — Stil principal ========== */
+/* ==============================
+   IWF CRM v9 - Stil complet (tema #a62091)
+   ============================== */
 
+/* Variabile principale */
 :root {
   --brand: #a62091;
   --bg: #f6f4f8;
-  --ink: #1f2937;
-  --muted: #6b7280;
   --card: #ffffff;
+  --muted: #6b7280;
+  --ink: #1f2937;
   --line: #e5e7eb;
-  --shadow: 0 4px 14px rgba(0,0,0,.08);
 }
 
-/* Structură generală */
+/* Reset și fonturi */
 body {
   margin: 0;
   background: var(--bg);
@@ -18,7 +20,7 @@ body {
   font-family: 'Inter', Arial, sans-serif;
 }
 
-/* Login */
+/* ===== LOGIN ===== */
 .login {
   height: 100vh;
   display: flex;
@@ -29,59 +31,68 @@ body {
 }
 
 .login-box {
+  background: rgba(255,255,255,0.08);
+  padding: 30px 50px;
+  border-radius: 16px;
   text-align: center;
-  background: rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 24px 40px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,.3);
   backdrop-filter: blur(8px);
+}
+
+.login-box h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
 }
 
 .login-box input {
   display: block;
-  width: 220px;
-  margin: 10px auto;
+  width: 240px;
+  margin: 8px auto;
   padding: 8px;
-  border-radius: 6px;
   border: none;
+  border-radius: 6px;
   text-align: center;
 }
 
 .btn {
   background: var(--brand);
   border: none;
-  color: white;
+  color: #fff;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 700;
-  margin-top: 10px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: #8d1b7f;
 }
 
 .spinner {
   width: 24px;
   height: 24px;
   border: 3px solid rgba(255,255,255,.4);
-  border-top: 3px solid white;
+  border-top: 3px solid #fff;
   border-radius: 50%;
   margin: 10px auto;
-  animation: spin 1s linear infinite;
   display: none;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-/* Aplicație principală */
+/* ===== APP STRUCTURE ===== */
 .app {
   display: flex;
   height: 100vh;
 }
 
 .sidebar {
-  width: 250px;
-  background: white;
+  width: 260px;
+  background: #fff;
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
@@ -89,29 +100,43 @@ body {
 }
 
 .brand {
-  font-weight: 800;
-  color: var(--brand);
-  padding: 20px;
+  text-align: center;
+  padding: 20px 10px;
   border-bottom: 1px solid var(--line);
-  font-size: 18px;
+}
+
+.brand h2 {
+  color: var(--brand);
+  margin: 6px 0 4px;
+}
+
+.brand .muted {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.logo {
+  width: 60px;
+  margin-bottom: 8px;
 }
 
 .nav {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 12px;
 }
 
 .nav button {
-  padding: 12px;
   border: none;
   background: none;
   text-align: left;
-  font-weight: 700;
+  padding: 10px 14px;
   border-radius: 8px;
   color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 4px;
   cursor: pointer;
-  transition: background .2s;
+  transition: all 0.2s ease;
 }
 
 .nav button:hover,
@@ -120,6 +145,7 @@ body {
   color: white;
 }
 
+/* ===== CONTENT ===== */
 .content {
   flex: 1;
   padding: 24px;
@@ -128,8 +154,50 @@ body {
 
 .card {
   background: var(--card);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
   padding: 20px;
   margin-bottom: 20px;
+}
+
+/* Tabel simplu */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+table th {
+  background: #fafafa;
+  font-weight: 700;
+}
+
+/* Badge-uri, etichete, etc. */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f1f1f1;
+  font-size: 12px;
+}
+
+.badge.success { background: #d1fae5; color: #065f46; }
+.badge.warn { background: #fef3c7; color: #92400e; }
+.badge.danger { background: #fee2e2; color: #991b1b; }
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
 }
