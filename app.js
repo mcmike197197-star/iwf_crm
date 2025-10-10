@@ -1,60 +1,115 @@
-// ========== IWF CRM v9 — Logica principală ==========
+// ===========================
+// IWF CRM v9 - Logica principală
+// ===========================
 
-// Referințe elemente
+// Elemente
 const login = document.getElementById('login');
 const app = document.getElementById('app');
 const btn = document.getElementById('btn-enter');
 const spinner = document.getElementById('spinner');
 const nav = document.querySelector('.nav');
-const content = document.getElementById('content');
+const mainContent = document.getElementById('main-content');
 
-// Funcție de schimbare pagină
-function changeView(view) {
-  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-  const activeBtn = document.querySelector(`[data-view='${view}']`);
-  if (activeBtn) activeBtn.classList.add('active');
-
-  if (view === 'dashboard') {
-    content.innerHTML = `<div class="card"><h2>Panou principal</h2><p>Statistici generale, activitate recentă și informații despre recrutări.</p></div>`;
-  }
-  if (view === 'candidates') {
-    content.innerHTML = `<div class="card"><h2>Candidați</h2><p>Listă candidați externi și interni. (funcționalități complete vor fi adăugate)</p></div>`;
-  }
-  if (view === 'clients') {
-    content.innerHTML = `<div class="card"><h2>Clienți</h2><p>Companii partenere și contacte asociate.</p></div>`;
-  }
-  if (view === 'orders') {
-    content.innerHTML = `<div class="card"><h2>Comenzi</h2><p>Monitorizare plasamente și poziții active.</p></div>`;
-  }
-  if (view === 'requests') {
-    content.innerHTML = `<div class="card"><h2>Cereri interne</h2><p>Solicitări și aprobări interne.</p></div>`;
-  }
-  if (view === 'reports') {
-    content.innerHTML = `<div class="card"><h2>Rapoarte</h2><p>Analiză performanță și grafice de recrutare.</p></div>`;
-  }
-  if (view === 'settings') {
-    content.innerHTML = `<div class="card"><h2>Setări</h2><p>Personalizare aplicație și preferințe.</p></div>`;
-  }
-}
-
-// Login funcțional
+// ===========================
+// Login și tranziție
+// ===========================
 btn.addEventListener('click', () => {
   spinner.style.display = 'block';
   setTimeout(() => {
     spinner.style.display = 'none';
     login.style.display = 'none';
     app.style.display = 'flex';
-    changeView('dashboard');
+    showView('dashboard');
   }, 1000);
 });
 
-// Navigare între pagini
+// ===========================
+// Navigare
+// ===========================
 nav.addEventListener('click', (e) => {
   const btn = e.target.closest('button');
   if (!btn) return;
   const view = btn.dataset.view;
-  changeView(view);
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showView(view);
 });
 
-// Pornire aplicație (implicit login)
-changeView('dashboard');
+// ===========================
+// Funcții principale
+// ===========================
+function showView(view) {
+  if (view === 'dashboard') {
+    mainContent.innerHTML = `
+      <div class="card">
+        <h2>Panou principal</h2>
+        <p>Bine ai venit în platforma de recrutare IWF CRM v9!</p>
+        <p>Aici vei vedea statistici și rapoarte generale despre candidați, clienți și comenzi.</p>
+      </div>
+    `;
+  }
+
+  if (view === 'candidates') {
+    mainContent.innerHTML = `
+      <div class="card">
+        <h2>Candidați</h2>
+        <p>Gestionare candidați externi și interni. (Funcționalități extinse urmează)</p>
+      </div>
+    `;
+  }
+
+  if (view === 'clients') {
+    mainContent.innerHTML = `
+      <div class="card">
+        <h2>Clienți</h2>
+        <p>Listă companii partenere, contacte și plasamente asociate.</p>
+      </div>
+    `;
+  }
+
+  if (view === 'orders') {
+    mainContent.innerHTML = `
+      <div class="card">
+        <h2>Comenzi</h2>
+        <p>Monitorizare comenzi de recrutare și status plasări.</p>
+      </div>
+    `;
+  }
+
+  if (view === 'requests') {
+    mainContent.innerHTML = `
+      <div class="card">
+        <h2>Cereri interne</h2>
+        <p>Solicitări din cadrul echipei și aprobare.</p>
+      </div>
+    `;
+  }
+
+  if (view === 'reports') {
+    mainContent.innerHTML = `
+      <div class="card">
+        <h2>Rapoarte</h2>
+        <p>Analize, grafice și performanță globală. (Integrare ulterioară API)</p>
+      </div>
+    `;
+  }
+
+  if (view === 'settings') {
+    mainContent.innerHTML = `
+      <div class="card">
+        <h2>Setări</h2>
+        <p>Configurare aplicație, culori și pregătire conexiune backend.</p>
+        <button class="btn" onclick="resetDemo()">Resetare demo</button>
+      </div>
+    `;
+  }
+}
+
+// ===========================
+// Resetare demo (șterge localStorage)
+// ===========================
+function resetDemo() {
+  localStorage.clear();
+  alert('Datele demo au fost resetate.');
+  location.reload();
+}
