@@ -9,21 +9,19 @@
     body {
       margin: 0;
       font-family: "Poppins", Arial, sans-serif;
-      color: #fff;
       background: radial-gradient(circle at 30% 20%, rgba(166, 32, 145, 0.35), transparent 40%),
                   radial-gradient(circle at 80% 80%, rgba(94, 43, 151, 0.25), transparent 40%), #111218;
+      color: #fff;
     }
     .hidden { display: none; }
-    input, button { font-family: inherit; }
+    button, input { font-family: inherit; }
   </style>
 </head>
+
 <body class="login-open">
 
-<!-- === LOGIN SCREEN (Prototip 4 original) === -->
-<section id="login" class="login-wrap" style="
-  display:flex;align-items:center;justify-content:center;
-  min-height:100vh;">
-  
+<!-- === LOGIN SCREEN (Prototip 4 elegant) === -->
+<section id="login" class="login-wrap" style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
   <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;
     width:90%;max-width:1000px;background:rgba(30,30,36,0.6);border:1px solid rgba(255,255,255,0.08);
     border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.4);backdrop-filter:blur(12px);color:#f5f5f5;">
@@ -78,7 +76,7 @@
 </section>
 
 <!-- === APP === -->
-<section id="app" class="app hidden">
+<section id="app" class="app hidden" style="background:#f6f4f8;color:#1f2937;">
   <div class="shell">
     <aside class="sidebar">
       <div class="brand">
@@ -92,6 +90,7 @@
       </div>
       <nav class="nav" id="nav">
         <button data-view="dashboard" class="active">Panou principal</button>
+        <button data-view="candidates">Candidați</button>
         <button data-view="clients">Clienți</button>
         <button data-view="orders">Comenzi</button>
         <button data-view="requests">Cereri interne</button>
@@ -103,7 +102,9 @@
     <main class="main">
       <div class="topbar">
         <div class="muted" id="crumb" style="font-weight:800">Panou principal</div>
-        <div class="search"><input id="global-search" placeholder="Căutare… (Enter)" class="input" style="padding:8px 10px"></div>
+        <div class="search">
+          <input id="global-search" placeholder="Căutare… (Enter)" class="input" style="padding:8px 10px">
+        </div>
       </div>
       <div id="main-content" class="content"></div>
     </main>
@@ -129,6 +130,8 @@
   });
 </script>
 
+<script src="app.js"></script>
+<script src="candidates.js"></script>
 <script src="clients.js"></script>
 <script src="orders.js"></script>
 <script src="requests.js"></script>
