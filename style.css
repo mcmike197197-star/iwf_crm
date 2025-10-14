@@ -1,4 +1,4 @@
-/* === IWF CRM v16 — Full width REAL + Sidebar modern === */
+/* === IWF CRM — Style Final Fullscreen Layout === */
 
 :root {
   --brand: #a62091;
@@ -6,14 +6,18 @@
   --bg: #f6f4f8;
   --text: #1f2937;
   --muted: #6b7280;
-  --card: #fff;
+  --card: #ffffff;
   --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   --radius: 10px;
   --transition: all 0.25s ease;
 }
 
 /* RESET */
-* { box-sizing: border-box; font-family: "Poppins", sans-serif; transition: var(--transition); }
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  transition: var(--transition);
+}
 
 body {
   margin: 0;
@@ -21,14 +25,16 @@ body {
   color: var(--text);
   overflow: hidden;
   height: 100vh;
+  width: 100vw;
 }
 
-/* APP LAYOUT */
+/* LAYOUT ROOT */
 .app {
   display: flex;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  position: relative;
 }
 
 /* SIDEBAR */
@@ -58,7 +64,8 @@ body {
 }
 
 .brand-badge {
-  width: 40px; height: 40px;
+  width: 40px;
+  height: 40px;
   background: #fff;
   border-radius: 12px;
   display: flex;
@@ -69,6 +76,7 @@ body {
 .sidebar h1 {
   font-size: 16px;
   margin: 0;
+  font-weight: 700;
 }
 
 .nav {
@@ -88,7 +96,6 @@ body {
   font-weight: 500;
   font-size: 15px;
   cursor: pointer;
-  transition: var(--transition);
 }
 
 .nav button:hover {
@@ -102,7 +109,7 @@ body {
   font-weight: 700;
 }
 
-/* MAIN */
+/* MAIN AREA */
 .main {
   position: absolute;
   left: 250px;
@@ -148,6 +155,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  background: var(--bg);
 }
 
 /* CARD */
@@ -192,6 +200,36 @@ button.btn {
 button.btn:hover {
   background: #b82ba2;
   box-shadow: 0 0 14px rgba(166, 32, 145, 0.4);
+}
+
+/* === FORCE FULL WIDTH (fix hidden containers) === */
+.shell, .wrapper, .container, .main, .content {
+  max-width: 100% !important;
+  width: 100vw !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+}
+
+.app {
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+}
+
+.main {
+  flex: 1 !important;
+  margin-left: 250px !important;
+  background: var(--bg) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.content {
+  width: calc(100vw - 250px) !important;
+  height: 100%;
+  background: var(--bg) !important;
 }
 
 /* SCROLLBAR */
