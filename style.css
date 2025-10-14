@@ -1,305 +1,345 @@
-/* === IWF CRM v11 — Enterprise Theme === */
+/* === IWF CRM v9 — Style.css === */
 
-/* ROOT VARIABLES */
+/* ---------- Base ---------- */
 :root {
   --brand: #a62091;
-  --brand-dark: #5f2b97;
-  --bg: #edeaf1;
-  --card: #ffffff;
-  --text: #1e1e2f;
+  --bg: #f6f4f8;
+  --text: #1f2937;
   --muted: #6b7280;
-  --border: rgba(0,0,0,0.05);
-  --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --card: #fff;
+  --shadow: rgba(0, 0, 0, 0.06);
 }
 
-/* GENERAL */
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", Arial, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: "Poppins", Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
+  min-height: 100vh;
+  transition: background 0.4s ease;
 }
 
-/* APP STRUCTURE */
-#app {
-  min-height: 100vh;
+/* ---------- Login Screen ---------- */
+body.login-open {
+  background: radial-gradient(circle at 30% 20%, rgba(166, 32, 145, 0.35), transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(94, 43, 151, 0.25), transparent 40%), #111218;
+  color: #fff;
+}
+
+#login input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 14px;
+}
+
+#login button {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#login #btn-enter {
+  background: var(--brand);
+  color: #fff;
+  transition: 0.2s;
+}
+
+#login #btn-enter:hover {
+  background: #b82ba2;
+  transform: translateY(-2px);
+}
+
+/* ---------- App Layout ---------- */
+.app {
   display: flex;
-  flex-direction: row;
+  min-height: 100vh;
   background: var(--bg);
 }
 
-/* SIDEBAR */
 .sidebar {
-  width: 240px;
-  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-dark) 100%);
+  width: 220px;
+  background: linear-gradient(180deg, #76237a, var(--brand));
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 24px 20px;
-  box-sizing: border-box;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+  justify-content: space-between;
+  padding: 20px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
 }
 
-.brand {
+.sidebar h1 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.sidebar .brand {
+  padding: 0 16px;
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 32px;
+  margin-bottom: 10px;
 }
 
 .brand-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
   background: #fff;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.brand h1 {
-  font-size: 15px;
-  margin: 0;
-  line-height: 1.2;
+.logo-embed {
+  width: 80%;
+  height: auto;
 }
 
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  padding: 0 12px;
 }
 
 .nav button {
   background: transparent;
-  border: none;
   color: #fff;
+  border: none;
   text-align: left;
   padding: 10px 14px;
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: 0.2s;
 }
 
-.nav button:hover,
+.nav button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .nav button.active {
-  background: rgba(255,255,255,0.15);
+  background: #fff;
+  color: var(--brand);
+  font-weight: 700;
 }
 
-/* MAIN CONTENT */
+/* ---------- Main Content ---------- */
 .main {
   flex: 1;
-  background: #fafafa;
-  padding: 32px;
-  box-sizing: border-box;
-  overflow-x: hidden;
+  margin-left: 220px;
+  padding: 24px;
 }
 
 .topbar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .search input {
-  border: 1px solid #ddd;
+  padding: 8px 12px;
   border-radius: 8px;
-  padding: 8px 10px;
+  border: 1px solid #ddd;
   font-size: 14px;
-  background: #fff;
-  width: 200px;
 }
 
-/* CARDS */
 .card {
   background: var(--card);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
   border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 22px;
-  transition: 0.2s ease;
+  padding: 20px;
+  box-shadow: 0 4px 10px var(--shadow);
+  margin-bottom: 16px;
 }
 
-.card:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-}
-
-.card h2, .card h3 {
-  margin-top: 0;
-  color: var(--text);
-}
-
-/* BUTTONS */
-button, .btn {
-  font-family: inherit;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s ease;
-  font-weight: 600;
-  padding: 8px 14px;
-}
-
-.btn-primary {
-  background: var(--brand);
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background: #8f1c7f;
-}
-
-.btn {
-  background: #fff;
-  border: 1px solid #ddd;
-  color: var(--text);
-}
-
-.btn:hover {
-  background: #f3f3f3;
-}
-
-/* TABLES */
+/* ---------- Tables ---------- */
 table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--card);
 }
 
 th, td {
-  padding: 10px 12px;
   text-align: left;
+  padding: 10px 12px;
   border-bottom: 1px solid #eee;
   font-size: 14px;
-  vertical-align: middle;
 }
 
 th {
-  background: #f8f8f8;
-  font-weight: 700;
-  color: var(--text);
+  font-weight: 600;
+  color: var(--muted);
+  background: #fafafa;
 }
 
-/* FORMS */
-.input, input, select, textarea {
+tr:hover {
+  background: #f9f8fb;
+}
+
+button.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+button.btn:hover {
+  opacity: 0.85;
+}
+
+/* ---------- Inputs ---------- */
+.input {
+  width: 100%;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 14px;
-  width: 100%;
-  box-sizing: border-box;
+}
+
+select.input {
   background: #fff;
 }
 
-label {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 500;
+textarea.input {
+  resize: vertical;
 }
 
-/* BADGES & CHIPS */
+/* ---------- Progress Bars ---------- */
+.progress {
+  height: 8px;
+  border-radius: 999px;
+  background: #f2f2f6;
+  overflow: hidden;
+}
+
+.progress .fill {
+  height: 100%;
+  background: var(--brand);
+  transition: width 0.3s ease;
+}
+
+/* ---------- Tags, Chips, Badges ---------- */
 .badge, .chip {
   display: inline-block;
+  padding: 4px 8px;
   border-radius: 999px;
-  padding: 4px 10px;
   font-size: 12px;
   font-weight: 600;
-  line-height: 1.4;
-}
-
-.badge {
   background: #fff;
-  border: 1px solid #ddd;
-  color: var(--text);
+  border: 1px solid #eee;
 }
 
 .chip {
-  background: rgba(166, 32, 145, 0.12);
-  color: var(--brand);
+  color: var(--text);
+  margin: 2px;
+}
+
+.badge {
+  background: var(--brand);
+  color: #fff;
   border: none;
 }
 
-/* TOASTS */
+/* ---------- Toast ---------- */
 .toast {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 16px;
+  bottom: 16px;
   background: #111;
   color: #fff;
-  padding: 12px 18px;
-  border-radius: 8px;
-  opacity: 0.95;
-  z-index: 999;
-  font-size: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  opacity: 0.96;
+  z-index: 90;
 }
 
-/* MODALS */
+/* ---------- Modal ---------- */
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.45);
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 100;
 }
 
 .modal {
-  width: min(95%, 800px);
+  width: min(980px, 95vw);
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  padding: 24px;
-  max-height: 90vh;
+  border-radius: 14px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  padding: 20px;
+  max-height: 85vh;
   overflow: auto;
 }
 
-/* RESPONSIVE LAYOUT */
-@media (max-width: 1024px) {
-  .sidebar {
-    width: 200px;
-  }
+/* ---------- Grid, Layout ---------- */
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(12, 1fr);
 }
 
-@media (max-width: 768px) {
-  #app {
-    flex-direction: column;
-  }
+.grid .card {
+  grid-column: span 6;
+}
 
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
   .sidebar {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 12px 10px;
-    background: linear-gradient(90deg, var(--brand) 0%, var(--brand-dark) 100%);
-    position: fixed;
-    top: 0;
-    z-index: 100;
+    display: none;
   }
-
   .main {
-    margin-top: 80px;
+    margin-left: 0;
     padding: 16px;
-    background: #fff;
   }
-
-  .card {
-    margin: 10px 0;
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  table {
+    font-size: 13px;
   }
 }
 
-/* BACKGROUND FIX */
-body:not(.login-open),
+/* ---------- Fixes for login + app ---------- */
+.hidden { display: none !important; }
+
+#login {
+  position: relative;
+  z-index: 10;
+}
+
 #app {
+  position: relative;
+  z-index: 1;
   background: var(--bg) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  body:not(.login-open), #app {
-    background: var(--bg) !important;
-    color: var(--text);
-  }
+body:not(.login-open) {
+  background: var(--bg) !important;
 }
+
+/* ---------- Small details ---------- */
+.small { font-size: 13px; }
+.muted { color: var(--muted); }
+strong { font-weight: 700; }
