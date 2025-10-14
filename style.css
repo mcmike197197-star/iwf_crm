@@ -1,58 +1,58 @@
-/* === IWF CRM v10 - Style === */
+/* === IWF CRM v11 — Enterprise Theme === */
 
-/* === CORE === */
+/* ROOT VARIABLES */
 :root {
   --brand: #a62091;
   --brand-dark: #5f2b97;
-  --bg: #f6f4f8;
-  --text: #1f2937;
+  --bg: #edeaf1;
+  --card: #ffffff;
+  --text: #1e1e2f;
   --muted: #6b7280;
-  --card: #fff;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --border: rgba(0,0,0,0.05);
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
+/* GENERAL */
 body {
+  margin: 0;
   font-family: "Poppins", Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
-  margin: 0;
   overflow-x: hidden;
 }
 
-/* === APP CONTAINER === */
+/* APP STRUCTURE */
 #app {
-  background: var(--bg);
   min-height: 100vh;
-  width: 100%;
-  position: relative;
   display: flex;
   flex-direction: row;
+  background: var(--bg);
 }
 
-/* === SIDEBAR === */
+/* SIDEBAR */
 .sidebar {
   width: 240px;
-  background: var(--brand-dark);
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-dark) 100%);
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 24px 20px;
   box-sizing: border-box;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.08);
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
 .brand-badge {
-  width: 42px;
-  height: 42px;
-  background: #fff;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,12 +61,13 @@ body {
 .brand h1 {
   font-size: 15px;
   margin: 0;
+  line-height: 1.2;
 }
 
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .nav button {
@@ -78,27 +79,28 @@ body {
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.2s ease;
 }
 
-.nav button.active,
-.nav button:hover {
-  background: var(--brand);
+.nav button:hover,
+.nav button.active {
+  background: rgba(255,255,255,0.15);
 }
 
-/* === MAIN AREA === */
+/* MAIN CONTENT */
 .main {
   flex: 1;
-  background: var(--bg);
-  padding: 24px;
+  background: #fafafa;
+  padding: 32px;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .search input {
@@ -106,15 +108,23 @@ body {
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 14px;
+  background: #fff;
+  width: 200px;
 }
 
-/* === CARDS === */
+/* CARDS */
 .card {
   background: var(--card);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow);
   border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 20px;
+  padding: 18px;
+  margin-bottom: 22px;
+  transition: 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
 }
 
 .card h2, .card h3 {
@@ -122,12 +132,13 @@ body {
   color: var(--text);
 }
 
-/* === BUTTONS === */
-.btn, button {
+/* BUTTONS */
+button, .btn {
+  font-family: inherit;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.2s ease;
   font-weight: 600;
   padding: 8px 14px;
 }
@@ -138,7 +149,7 @@ body {
 }
 
 .btn-primary:hover {
-  background: #8a1679;
+  background: #8f1c7f;
 }
 
 .btn {
@@ -151,10 +162,11 @@ body {
   background: #f3f3f3;
 }
 
-/* === TABLES === */
+/* TABLES */
 table {
   width: 100%;
   border-collapse: collapse;
+  background: var(--card);
 }
 
 th, td {
@@ -162,15 +174,16 @@ th, td {
   text-align: left;
   border-bottom: 1px solid #eee;
   font-size: 14px;
+  vertical-align: middle;
 }
 
 th {
-  background: #fafafa;
+  background: #f8f8f8;
   font-weight: 700;
   color: var(--text);
 }
 
-/* === FORMS === */
+/* FORMS */
 .input, input, select, textarea {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -178,31 +191,38 @@ th {
   font-size: 14px;
   width: 100%;
   box-sizing: border-box;
+  background: #fff;
 }
 
 label {
   font-size: 13px;
   color: var(--muted);
+  font-weight: 500;
 }
 
-/* === BADGES & CHIPS === */
+/* BADGES & CHIPS */
 .badge, .chip {
   display: inline-block;
-  background: #fff;
-  border: 1px solid #ddd;
   border-radius: 999px;
   padding: 4px 10px;
   font-size: 12px;
   font-weight: 600;
+  line-height: 1.4;
+}
+
+.badge {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: var(--text);
 }
 
 .chip {
-  background: rgba(166, 32, 145, 0.1);
+  background: rgba(166, 32, 145, 0.12);
   color: var(--brand);
   border: none;
 }
 
-/* === TOAST === */
+/* TOASTS */
 .toast {
   position: fixed;
   right: 20px;
@@ -216,7 +236,7 @@ label {
   font-size: 14px;
 }
 
-/* === MODALS === */
+/* MODALS */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -237,7 +257,7 @@ label {
   overflow: auto;
 }
 
-/* === RESPONSIVE FIXES === */
+/* RESPONSIVE LAYOUT */
 @media (max-width: 1024px) {
   .sidebar {
     width: 200px;
@@ -247,17 +267,23 @@ label {
 @media (max-width: 768px) {
   #app {
     flex-direction: column;
-    background: var(--bg) !important;
   }
 
   .sidebar {
-    display: none;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 12px 10px;
+    background: linear-gradient(90deg, var(--brand) 0%, var(--brand-dark) 100%);
+    position: fixed;
+    top: 0;
+    z-index: 100;
   }
 
   .main {
-    width: 100%;
-    background: var(--bg);
+    margin-top: 80px;
     padding: 16px;
+    background: #fff;
   }
 
   .card {
@@ -265,24 +291,15 @@ label {
   }
 }
 
-/* === FULL WHITE BACKGROUND FIX ON MOBILE === */
-body:not(.login-open) {
-  background: #f6f4f8 !important;
-}
-
+/* BACKGROUND FIX */
+body:not(.login-open),
 #app {
-  background: #f6f4f8 !important;
-  min-height: 100vh;
-  width: 100%;
-  position: relative;
-  overflow-x: hidden;
+  background: var(--bg) !important;
 }
 
-/* === DARK MODE PROTECTION === */
 @media (prefers-color-scheme: dark) {
-  body:not(.login-open),
-  #app {
-    background: #f6f4f8 !important;
+  body:not(.login-open), #app {
+    background: var(--bg) !important;
     color: var(--text);
   }
 }
