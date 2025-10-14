@@ -1,4 +1,4 @@
-/* === IWF CRM — FULLSCREEN + LOGIN FIX === */
+/* === IWF CRM — FULLSCREEN + LOGIN FIXED FINAL === */
 
 :root {
   --brand: #a62091;
@@ -19,38 +19,38 @@
   transition: var(--transition);
 }
 
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden !important;
   background: var(--bg);
   color: var(--text);
-  overflow: hidden;
-  height: 100vh;
-  width: 100%;
+  height: 100%;
 }
 
 /* ==== LOGIN PAGE ==== */
 .login-wrap {
-  position: fixed;
+  position: fixed !important;
   inset: 0;
-  background: radial-gradient(circle at top left, #2b0037, #000);
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  background: radial-gradient(circle at top left, #2b0037, #000);
+  z-index: 9999 !important;
 }
 
 .login-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
   border-radius: 20px;
-  box-shadow: 0 0 60px rgba(0,0,0,0.5);
+  box-shadow: 0 0 50px rgba(0,0,0,0.6);
   width: 900px;
   max-width: 90%;
   padding: 40px;
   color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 .login-card input {
@@ -182,102 +182,3 @@ body {
   position: sticky;
   top: 0;
   z-index: 5;
-}
-
-.search input {
-  padding: 8px 12px;
-  border-radius: var(--radius);
-  border: 1px solid #ddd;
-  font-size: 14px;
-  width: 260px;
-}
-
-/* CONTENT */
-.content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 30px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  background: var(--bg);
-  box-sizing: border-box;
-}
-
-/* CARD */
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  width: 100%;
-  padding: 24px;
-  margin-bottom: 24px;
-}
-
-/* TABLES */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-th, td {
-  text-align: left;
-  padding: 12px 14px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-  color: var(--text);
-}
-th {
-  color: var(--muted);
-  background: #fafafa;
-}
-tr:hover { background: #f8f6fb; }
-
-/* BUTTONS */
-button.btn {
-  padding: 9px 14px;
-  border-radius: 8px;
-  border: none;
-  background: var(--brand);
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-}
-button.btn:hover {
-  background: #b82ba2;
-  box-shadow: 0 0 14px rgba(166, 32, 145, 0.4);
-}
-
-/* SCROLLBAR */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #aaa; }
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .sidebar { width: 220px; }
-  .main { left: 220px; width: calc(100% - 220px); }
-}
-@media (max-width: 768px) {
-  .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .main {
-    left: 0;
-    width: 100%;
-  }
-  .nav { flex-direction: row; overflow-x: auto; }
-  .content { padding: 20px; }
-}
-
-/* TEXT */
-.small { font-size: 13px; }
-.muted { color: var(--muted); }
-strong { font-weight: 700; }
