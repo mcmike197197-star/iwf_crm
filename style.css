@@ -1,6 +1,4 @@
-/* === IWF CRM v9 — Style.css === */
-
-/* ---------- Base ---------- */
+/* === IWF CRM v11.3 — Layout Fix === */
 :root {
   --brand: #a62091;
   --bg: #f6f4f8;
@@ -20,11 +18,10 @@ body {
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
-  min-height: 100vh;
-  transition: background 0.4s ease;
+  height: 100vh;
 }
 
-/* ---------- Login Screen ---------- */
+/* === LOGIN SCREEN === */
 body.login-open {
   background: radial-gradient(circle at 30% 20%, rgba(166, 32, 145, 0.35), transparent 40%),
               radial-gradient(circle at 80% 80%, rgba(94, 43, 151, 0.25), transparent 40%), #111218;
@@ -60,25 +57,28 @@ body.login-open {
   transform: translateY(-2px);
 }
 
-/* ---------- App Layout ---------- */
+/* === APP LAYOUT === */
 .app {
   display: flex;
-  min-height: 100vh;
-  background: var(--bg);
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
 }
 
 .sidebar {
   width: 220px;
-  background: linear-gradient(180deg, #76237a, var(--brand));
+  background: linear-gradient(180deg, #7a2e9b, var(--brand));
   color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 0;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 20px;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h1 {
@@ -91,7 +91,7 @@ body.login-open {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .brand-badge {
@@ -113,6 +113,7 @@ body.login-open {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
   padding: 0 12px;
 }
 
@@ -129,7 +130,7 @@ body.login-open {
 }
 
 .nav button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .nav button.active {
@@ -138,11 +139,16 @@ body.login-open {
   font-weight: 700;
 }
 
-/* ---------- Main Content ---------- */
+/* === MAIN CONTENT === */
 .main {
   flex: 1;
   margin-left: 220px;
-  padding: 24px;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar {
@@ -150,6 +156,11 @@ body.login-open {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+  padding-bottom: 10px;
 }
 
 .search input {
@@ -159,6 +170,12 @@ body.login-open {
   font-size: 14px;
 }
 
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* === CARDS & TABLES === */
 .card {
   background: var(--card);
   border-radius: 12px;
@@ -167,7 +184,6 @@ body.login-open {
   margin-bottom: 16px;
 }
 
-/* ---------- Tables ---------- */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -190,6 +206,7 @@ tr:hover {
   background: #f9f8fb;
 }
 
+/* === BUTTONS === */
 button.btn {
   padding: 8px 12px;
   border-radius: 8px;
@@ -206,73 +223,37 @@ button.btn:hover {
   opacity: 0.85;
 }
 
-/* ---------- Inputs ---------- */
+/* === INPUTS === */
 .input {
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 14px;
-}
-
-select.input {
   background: #fff;
 }
 
-textarea.input {
-  resize: vertical;
-}
-
-/* ---------- Progress Bars ---------- */
-.progress {
-  height: 8px;
-  border-radius: 999px;
-  background: #f2f2f6;
-  overflow: hidden;
-}
-
-.progress .fill {
-  height: 100%;
-  background: var(--brand);
-  transition: width 0.3s ease;
-}
-
-/* ---------- Tags, Chips, Badges ---------- */
+/* === TAGS / BADGES === */
 .badge, .chip {
   display: inline-block;
   padding: 4px 8px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-  background: #fff;
-  border: 1px solid #eee;
-}
-
-.chip {
-  color: var(--text);
-  margin: 2px;
 }
 
 .badge {
   background: var(--brand);
   color: #fff;
-  border: none;
 }
 
-/* ---------- Toast ---------- */
-.toast {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  background: #111;
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  opacity: 0.96;
-  z-index: 90;
+.chip {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid #eee;
 }
 
-/* ---------- Modal ---------- */
+/* === MODAL & TOAST === */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -284,7 +265,7 @@ textarea.input {
 }
 
 .modal {
-  width: min(980px, 95vw);
+  width: min(960px, 95vw);
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
@@ -293,35 +274,41 @@ textarea.input {
   overflow: auto;
 }
 
-/* ---------- Grid, Layout ---------- */
-.grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(12, 1fr);
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  background: #111;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  opacity: 0.96;
+  z-index: 120;
 }
 
-.grid .card {
-  grid-column: span 6;
-}
-
-/* ---------- Responsive ---------- */
+/* === RESPONSIVE === */
 @media (max-width: 980px) {
   .sidebar {
-    display: none;
+    position: relative;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 16px;
   }
+
   .main {
     margin-left: 0;
     padding: 16px;
   }
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  table {
-    font-size: 13px;
+
+  .nav {
+    flex-direction: row;
+    overflow-x: auto;
   }
 }
 
-/* ---------- Fixes for login + app ---------- */
+/* === FIXES LOGIN + APP === */
 .hidden { display: none !important; }
 
 #login {
@@ -339,7 +326,7 @@ body:not(.login-open) {
   background: var(--bg) !important;
 }
 
-/* ---------- Small details ---------- */
+/* === TEXT UTILITIES === */
 .small { font-size: 13px; }
 .muted { color: var(--muted); }
 strong { font-weight: 700; }
