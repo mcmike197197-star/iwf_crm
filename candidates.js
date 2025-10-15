@@ -13,7 +13,9 @@
   const nav = document.querySelector('.nav');
 
   // ---- UI state (pagina curentă, filtrul, ultima vedere)
-  const ui = loadState() || { page: 1, perPage: 25, query: '', lastView: 'list' };
+  const STATUS_FILTERS = ['Toți', 'Activ', 'Inactiv'];
+  const ui = loadState() || { page: 1, perPage: 25, query: '', status: 'Toți', lastView: 'list' };
+  if (!ui.status) ui.status = 'Toți';
 
   // ---- DB mock: 50 candidați RO + listă clienți
   let db = loadDB();
@@ -23,6 +25,11 @@
   }
 
   // ---------- Helpers ----------
+  const notify = (msg, tone='info') => {
+    if (window.IWF_APP?.showToast) { window.IWF_APP.showToast(msg, tone); }
+    else { alert(msg); }
+  };
+
   function saveState() { localStorage.setItem(STATE_KEY, JSON.stringify(ui)); }
   function loadState() {
     try { return JSON.parse(localStorage.getItem(STATE_KEY) || 'null'); } catch(e){ return null; }
@@ -50,6 +57,21 @@
     a.download = filename;
     a.click();
     URL.revokeObjectURL(a.href);
+  }
+  function exportFiltered(list) {
+    const header = 'id,nume,email,locatie,functie,status,experienta,creatLa';
+    const rows = list.map(c => [
+      c.id,
+      `${c.firstName} ${c.lastName}`.trim(),
+      c.email || '',
+      c.location || '',
+      c.title || '',
+      c.status || '',
+      c.experienceYears || 0,
+      c.createdAt || ''
+    ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','));
+    download('candidati_filtrati.csv', [header].concat(rows).join('\n'));
+    notify('Export CSV generat din filtrul curent.', 'success');
   }
   function el(html) { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; }
 
@@ -125,6 +147,9 @@
         (c.location || '').toLowerCase().includes(q)
       );
     }
+    if (ui.status && ui.status !== 'Toți') {
+      list = list.filter(c => (c.status || '').toLowerCase() === ui.status.toLowerCase());
+    }
     return list;
   }
 
@@ -142,6 +167,26 @@
     const list = getFiltered();
     const { total, pages, slice } = paginate(list);
 
+    const externalTotal = db.candidates.filter(c => c.external).length;
+    const activeCount = list.filter(c => (c.status || '').toLowerCase() === 'activ').length;
+    const inactiveCount = list.length - activeCount;
+    const avgExp = list.length ? (list.reduce((sum, cand) => sum + (cand.experienceYears || 0), 0) / list.length).toFixed(1) : '0';
+    const newThisWeek = list.filter(c => {
+      const created = new Date(c.createdAt);
+      if (isNaN(created)) return false;
+      const diff = Date.now() - created.getTime();
+      return diff <= 1000 * 60 * 60 * 24 * 7;
+    }).length;
+    const cityMap = list.reduce((acc, cand) => {
+      const city = (cand.location || '').split(',')[0].trim();
+      if (!city) return acc;
+      acc[city] = (acc[city] || 0) + 1;
+      return acc;
+    }, {});
+    const topCityEntry = Object.entries(cityMap).sort((a, b) => b[1] - a[1])[0] || [];
+    const topCity = topCityEntry[0] || '—';
+    const topCityCount = topCityEntry[1] || 0;
+
     const tableRows = slice.map(c => `
       <tr>
         <td>
@@ -156,27 +201,68 @@
     `).join('');
 
     mainContent.innerHTML = `
-      <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-          <h2 style="margin:0">Candidați externi</h2>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input id="cand_q" placeholder="Caută nume, email, funcție, oraș" class="input" style="padding:8px 12px;min-width:280px">
-            <button class="btn" id="cand_add">Adaugă candidat</button>
+      <div class="card glass">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:16px">
+          <div>
+            <span class="pill pill-glass"><i data-lucide="users"></i> Talent pool extern</span>
+            <h2 style="margin:10px 0 6px">Inventar candidați externi</h2>
+            <p class="muted small">Filtrează rapid candidații și verifică insight-urile esențiale pentru plasări.</p>
+          </div>
+          <div class="segmented" id="cand_status_filter">
+            ${STATUS_FILTERS.map(status => `
+              <button data-status="${status}" class="${status===ui.status?'active':''}">${status}</button>
+            `).join('')}
           </div>
         </div>
-        <div style="margin-top:10px;overflow:auto">
+        <div class="kpi-grid" style="margin-top:18px;">
+          <div class="kpi-card">
+            <div class="muted small">Candidați (filtrați)</div>
+            <div class="kpi-value">${list.length}</div>
+            <span class="muted small">din ${externalTotal} candidați externi</span>
+          </div>
+          <div class="kpi-card">
+            <div class="muted small">Activ / Inactiv</div>
+            <div class="kpi-value">${activeCount} / ${inactiveCount}</div>
+            <span class="muted small">Activ: ${(list.length?Math.round((activeCount/list.length)*100):0)}%</span>
+          </div>
+          <div class="kpi-card">
+            <div class="muted small">Experiență medie</div>
+            <div class="kpi-value">${avgExp} ani</div>
+            <span class="muted small">${newThisWeek} adăugați în ultimele 7 zile</span>
+          </div>
+          <div class="kpi-card">
+            <div class="muted small">Oraș dominant</div>
+            <div class="kpi-value">${topCity}</div>
+            <span class="muted small">${topCityCount} candidați în filtrare</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div>
+            <h3 style="margin:0">Listă candidați externi</h3>
+            <p class="muted small">Căutare multi-câmp, export rapid și acces la profil.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <input id="cand_q" placeholder="Caută nume, email, funcție, oraș" class="input" style="min-width:260px">
+            <button class="btn secondary" id="cand_export"><i data-lucide="download"></i> Export CSV</button>
+            <button class="btn" id="cand_add"><i data-lucide="user-plus"></i> Adaugă candidat</button>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:16px;">
           <table>
             <thead>
               <tr><th>Candidat</th><th>Locație</th><th>Funcție</th><th>Experiență</th><th>Status</th></tr>
             </thead>
-            <tbody>${tableRows}</tbody>
+            <tbody>${tableRows || '<tr><td colspan="5" class="muted">Nu există candidați în acest filtru.</td></tr>'}</tbody>
           </table>
         </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;flex-wrap:wrap;gap:12px">
           <div class="muted" style="font-size:13px">Total: <strong>${total}</strong> • Pagina <strong>${ui.page}</strong> / ${pages}</div>
-          <div style="display:flex;gap:8px">
-            <button class="btn" id="pg_prev" ${ui.page<=1?'disabled':''}>◀️ Anterioară</button>
-            <button class="btn" id="pg_next" ${ui.page>=pages?'disabled':''}>Următoare ▶️</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn secondary" id="pg_prev" ${ui.page<=1?'disabled':''}>◀ Anterioară</button>
+            <button class="btn secondary" id="pg_next" ${ui.page>=pages?'disabled':''}>Următoare ▶</button>
           </div>
         </div>
       </div>
@@ -192,6 +278,19 @@
         saveState();
         renderList();
       }
+    });
+
+    document.getElementById('cand_export')?.addEventListener('click', ()=>{
+      exportFiltered(list);
+    });
+
+    document.getElementById('cand_status_filter')?.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        ui.status = btn.dataset.status;
+        ui.page = 1;
+        saveState();
+        renderList();
+      });
     });
 
     document.getElementById('pg_prev')?.addEventListener('click', ()=>{
@@ -224,8 +323,11 @@
       db.candidates.unshift(c);
       persistDB();
       ui.page = 1; ui.query = ''; saveState();
+      notify('Profil candidat nou creat (demo).', 'success');
       openProfile(id);
     });
+
+    if (window.lucide) { window.lucide.createIcons(); }
   }
 
   // ---------- Profil candidat ----------
@@ -271,7 +373,7 @@
     `;
 
     document.getElementById('back_to_list').addEventListener('click', ()=>{ ui.lastView='list'; saveState(); renderList(); });
-    document.getElementById('save_profile').addEventListener('click', ()=>{ persistDB(); alert('Salvat!'); });
+    document.getElementById('save_profile').addEventListener('click', ()=>{ persistDB(); notify('Modificările din profil au fost salvate.', 'success'); });
 
     const tabs = document.getElementById('tabs');
     tabs.addEventListener('click', (e)=>{
@@ -327,7 +429,7 @@
         c.notes = document.getElementById('pf_notes').value || '';
         c.history.push({ when: new Date().toISOString(), who:'Manager demo', action:'Profil actualizat' });
         persistDB();
-        alert('Profil salvat.');
+        notify('Profil candidat actualizat.', 'success');
       });
       return;
     }
@@ -436,7 +538,7 @@
         const clientName = (document.getElementById('pl_client').value||'').trim();
         const title = (document.getElementById('pl_title').value||'').trim() || 'Poziție';
         const stage = document.getElementById('pl_stage').value;
-        if (!clientName) { alert('Completează numele clientului.'); return; }
+        if (!clientName) { notify('Completează numele clientului.', 'warn'); return; }
 
         // dacă numele introdus începe cu literele unui client existent, îl „snap-uim” pe acela
         const snap = db.clients.find(x => x.toLowerCase().startsWith(clientName.toLowerCase()));
@@ -484,7 +586,7 @@
         };
         c.history.push({ when:new Date().toISOString(), who:'Manager demo', action:'Financiar actualizat' });
         persistDB();
-        alert('Date financiare salvate.');
+        notify('Date financiare salvate.', 'success');
       });
       return;
     }
