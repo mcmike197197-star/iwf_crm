@@ -7,10 +7,6 @@
   const CAND_KEY    = 'iwf_crm_v9_candidates'; // reutilizăm candidații existenți
   const mainContent = document.getElementById('main-content');
   const nav         = document.querySelector('.nav');
-  const notify = (msg, tone='info') => {
-    if (window.IWF_APP?.showToast) window.IWF_APP.showToast(msg, tone);
-    else alert(msg);
-  };
 
   // Companiile din grup (fix)
   const GROUP_COMPANIES = [
@@ -217,7 +213,7 @@
       };
       db.requests.unshift(r);
       save(STORAGE_KEY, db);
-      notify('Cerere internă creată.', 'success');
+      alert('Cerere creată');
       renderList();
     });
   }
@@ -288,7 +284,7 @@
         r.history.push({ when:new Date().toISOString(), who:'Manager demo', action:`Status modificat la "${newStatus}"` });
         save(STORAGE_KEY, db);
         openReq(r.id);
-        notify('Status actualizat.', 'success');
+        alert('Status actualizat');
       }
     });
     document.getElementById('rq_csv').addEventListener('click', ()=>{
@@ -320,7 +316,7 @@
       const id = document.getElementById('pc_cand').value;
       const stage = document.getElementById('pc_stage').value;
       const c = (candDB.candidates||[]).find(x=>x.id===id);
-      if(!c){ notify('Selectează un candidat.', 'warn'); return; }
+      if(!c){ alert('Selectează un candidat.'); return; }
 
       req.proposed.push({ id:'p-'+shortId(), candId:id, name:`${c.firstName} ${c.lastName}`, title:c.title||'', stage });
       req.history.push({ when:new Date().toISOString(), who:'Manager demo', action:`Candidat propus: ${c.firstName} ${c.lastName} (${stage})` });
@@ -331,7 +327,7 @@
       c.history.push({ when:new Date().toISOString(), who:'Manager demo', action:`Propus la cererea internă ${req.id} (${req.company})` });
       save(CAND_KEY, candDB);
 
-      notify('Candidat propus în cerere.', 'success');
+      alert('Candidat propus');
       openReq(req.id);
     });
   }

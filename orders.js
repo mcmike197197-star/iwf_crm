@@ -7,10 +7,6 @@
   const CAND_KEY = 'iwf_crm_v9_candidates';
   const mainContent = document.getElementById('main-content');
   const nav = document.querySelector('.nav');
-  const notify = (msg, tone='info') => {
-    if (window.IWF_APP?.showToast) window.IWF_APP.showToast(msg, tone);
-    else alert(msg);
-  };
 
   let dbOrders = load(STORAGE_KEY) || seedOrders();
   let dbClients = load(CLIENT_KEY) || [];
@@ -114,7 +110,7 @@
       };
       dbOrders.unshift(o);
       save(STORAGE_KEY,dbOrders);
-      notify('Comandă creată în demo.', 'success');
+      alert('Comandă creată');
       renderList();
     });
   }
@@ -176,7 +172,7 @@
     document.getElementById('cancel_assoc').addEventListener('click',()=>openOrder(o.id));
     document.getElementById('save_assoc').addEventListener('click',()=>{
       const candId=document.getElementById('cand_sel').value;
-      if(!candId){notify('Selectează un candidat.', 'warn');return;}
+      if(!candId){alert('Selectează un candidat');return;}
       if(!o.candidates.includes(candId)){
         o.candidates.push(candId);
         o.filledCount=Math.min(o.targetHires,o.filledCount+1);
@@ -189,7 +185,7 @@
         cdb.candidates=dbCandidates;
         save(CAND_KEY,cdb);
       }
-      notify('Candidat asociat cu succes.', 'success');
+      alert('Candidat asociat');
       openOrder(o.id);
     });
   }

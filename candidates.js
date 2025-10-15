@@ -13,7 +13,10 @@
   const nav = document.querySelector('.nav');
 
   // ---- UI state (pagina curentă, filtrul, ultima vedere)
-
+  const DEFAULT_UI = { page: 1, perPage: 25, query: '', status: 'all', sort: 'recent', lastView: 'list' };
+  const ui = Object.assign({}, DEFAULT_UI, loadState() || {});
+  if (!['all', 'active', 'inactive'].includes(ui.status)) ui.status = DEFAULT_UI.status;
+  if (!['recent', 'name', 'experience'].includes(ui.sort)) ui.sort = DEFAULT_UI.sort;
 
   // ---- DB mock: 50 candidați RO + listă clienți
   let db = loadDB();
@@ -23,11 +26,6 @@
   }
 
   // ---------- Helpers ----------
-  const notify = (msg, tone='info') => {
-    if (window.IWF_APP?.showToast) { window.IWF_APP.showToast(msg, tone); }
-    else { alert(msg); }
-  };
-
   function saveState() { localStorage.setItem(STATE_KEY, JSON.stringify(ui)); }
   function loadState() {
     try { return JSON.parse(localStorage.getItem(STATE_KEY) || 'null'); } catch(e){ return null; }
@@ -55,21 +53,6 @@
     a.download = filename;
     a.click();
     URL.revokeObjectURL(a.href);
-  }
-  function exportFiltered(list) {
-    const header = 'id,nume,email,locatie,functie,status,experienta,creatLa';
-    const rows = list.map(c => [
-      c.id,
-      `${c.firstName} ${c.lastName}`.trim(),
-      c.email || '',
-      c.location || '',
-      c.title || '',
-      c.status || '',
-      c.experienceYears || 0,
-      c.createdAt || ''
-    ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','));
-    download('candidati_filtrati.csv', [header].concat(rows).join('\n'));
-    notify('Export CSV generat din filtrul curent.', 'success');
   }
   function el(html) { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; }
 
@@ -145,6 +128,15 @@
   };
 
   // ---------- Listă + paginare ----------
+  function getFiltered() {
+    const q = (ui.query || '').trim().toLowerCase();
+    let list = db.candidates.filter(c => c.external); // doar externi conform cerinței
+
+    if (ui.status === 'active') {
+      list = list.filter(c => c.status === 'Activ');
+    } else if (ui.status === 'inactive') {
+      list = list.filter(c => c.status !== 'Activ');
+    }
 
     if (q) {
       list = list.filter(c =>
@@ -153,6 +145,22 @@
         (c.title || '').toLowerCase().includes(q) ||
         (c.location || '').toLowerCase().includes(q)
       );
+    }
+
+    if (ui.sort === 'name') {
+      list.sort((a, b) => {
+        const nameA = `${a.lastName || ''} ${a.firstName || ''}`.trim();
+        const nameB = `${b.lastName || ''} ${b.firstName || ''}`.trim();
+        return nameA.localeCompare(nameB, 'ro', { sensitivity: 'base' });
+      });
+    } else if (ui.sort === 'experience') {
+      list.sort((a, b) => (b.experienceYears || 0) - (a.experienceYears || 0));
+    } else {
+      list.sort((a, b) => {
+        const aDate = new Date(a.createdAt || 0).getTime();
+        const bDate = new Date(b.createdAt || 0).getTime();
+        return bDate - aDate;
+      });
     }
 
     return list;
@@ -167,13 +175,174 @@
     return { total, pages, slice };
   }
 
+  function renderList() {
+    ui.lastView = 'list'; saveState();
+    const list = getFiltered();
+    const { total, pages, slice } = paginate(list);
 
+    const cards = slice.map(c => {
+      const initials = `${(c.firstName || '?')[0] || ''}${(c.lastName || '?')[0] || ''}`.toUpperCase();
+      const createdAt = fmtDate(c.createdAt) || '—';
+      const history = (c.history && c.history.length) ? c.history[c.history.length - 1] : null;
+      const historyText = history ? `${fmtDate(history.when)} • ${history.action}` : 'Fără activitate recentă';
+      const statusClass = c.status === 'Activ' ? 'candidate-status--active' : 'candidate-status--inactive';
+      return `
+        <article class="candidate-card">
+          <div class="candidate-card__header">
+            <div class="candidate-avatar" aria-hidden="true">${initials}</div>
+            <div class="candidate-card__title">
+              <a href="#" data-open="${c.id}" class="candidate-name">${c.firstName} ${c.lastName}</a>
+              <p class="candidate-role">${c.title || 'Funcție nedefinită'}</p>
+            </div>
+            <span class="candidate-status ${statusClass}">${c.status}</span>
+          </div>
+          <div class="candidate-card__meta">
+            <span>📍 ${c.location || 'Locație indisponibilă'}</span>
+            <span>💼 ${c.experienceYears || 0} ani experiență</span>
+            <span>🗓 ${createdAt}</span>
+          </div>
+          <div class="candidate-card__contact">
+            <span>✉️ ${c.email || '—'}</span>
+            <span>📞 ${c.phone || '—'}</span>
+          </div>
+          <div class="candidate-card__footer">
+            <span class="candidate-history">${historyText}</span>
+            <button class="btn btn-light" data-open="${c.id}">Deschide profil</button>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    const emptyState = `
+      <div class="card candidate-empty">
+        <h3>Nu există candidați în această listă</h3>
+        <p>Încearcă să elimini filtrele de căutare sau adaugă un nou candidat pentru a începe să-ți construiești pipeline-ul.</p>
+      </div>
+    `;
+
+    mainContent.innerHTML = `
+      <section class="candidate-page">
+        <div class="card candidate-hero">
+          <div>
+            <p class="candidate-eyebrow">Talent pipeline</p>
+            <h2>Candidați externi</h2>
+            <p>Gestionează aplicanții activi și revino rapid la profilul lor complet, cu istoricul și documentele aferente.</p>
+          </div>
+          <div class="candidate-hero__actions">
+            <div class="candidate-stat">
+              <span class="candidate-stat__label">Total candidați</span>
+              <span class="candidate-stat__value">${total}</span>
+            </div>
+            <button class="btn btn-primary" id="cand_add" type="button">+ Adaugă candidat</button>
+          </div>
+          <p class="candidate-hero__note">Modificările și candidații nou adăugați sunt salvați automat în browserul tău.</p>
+        </div>
+
+        <div class="card candidate-toolbar">
+          <div class="candidate-toolbar__search">
+            <span aria-hidden="true">🔍</span>
+            <input id="cand_q" placeholder="Caută nume, email, funcție sau oraș" autocomplete="off">
+            ${ui.query ? '<button type="button" class="candidate-clear" id="cand_clear">✕</button>' : ''}
+          </div>
+          <div class="candidate-toolbar__meta">
+            <div class="candidate-filters" role="group" aria-label="Status candidați">
+              <button class="chip ${ui.status === 'all' ? 'chip--active' : ''}" data-status="all" type="button">Toți</button>
+              <button class="chip ${ui.status === 'active' ? 'chip--active' : ''}" data-status="active" type="button">Activi</button>
+              <button class="chip ${ui.status === 'inactive' ? 'chip--active' : ''}" data-status="inactive" type="button">Inactivi</button>
+            </div>
+            <label class="candidate-sort" for="cand_sort">
+              <span>Sortare</span>
+              <select id="cand_sort">
+                <option value="recent">Cele mai noi</option>
+                <option value="name">Nume A-Z</option>
+                <option value="experience">Experiență</option>
+              </select>
+            </label>
+            <span class="muted candidate-toolbar__page">Pagina <strong>${ui.page}</strong> din ${pages}</span>
+          </div>
+        </div>
+
+        <div class="candidate-grid">${cards || emptyState}</div>
+
+        <div class="card candidate-pagination">
+          <div class="muted">Se afișează ${slice.length} din ${total} candidați</div>
+          <div class="candidate-pagination__controls">
+            <button class="btn btn-light" id="pg_prev" ${ui.page<=1?'disabled':''}>◀️ Anterioară</button>
+            <button class="btn btn-light" id="pg_next" ${ui.page>=pages?'disabled':''}>Următoare ▶️</button>
+          </div>
+        </div>
+      </section>
     `;
 
     // setăm inputul de căutare la valoarea curentă
     const q = document.getElementById('cand_q');
     q.value = ui.query || '';
+    let debounce;
+    q.addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter') {
+        ui.query = q.value;
+        ui.page = 1;
+        saveState();
+        renderList();
+      }
+    });
+    q.addEventListener('input', ()=>{
+      clearTimeout(debounce);
+      debounce = setTimeout(()=>{
+        ui.query = q.value;
+        ui.page = 1;
+        saveState();
+        renderList();
+      }, 250);
+    });
 
+    document.getElementById('cand_clear')?.addEventListener('click', ()=>{
+      ui.query = '';
+      ui.page = 1;
+      saveState();
+      renderList();
+    });
+
+    const sortSelect = document.getElementById('cand_sort');
+    if (sortSelect) {
+      sortSelect.value = ui.sort || 'recent';
+      sortSelect.addEventListener('change', ()=>{
+        ui.sort = sortSelect.value || 'recent';
+        ui.page = 1;
+        saveState();
+        renderList();
+      });
+    }
+
+    mainContent.querySelectorAll('[data-status]').forEach(btn => {
+      btn.addEventListener('click', ()=>{
+        const status = btn.getAttribute('data-status') || 'all';
+        if (ui.status === status) return;
+        ui.status = status;
+        ui.page = 1;
+        saveState();
+        renderList();
+      });
+    });
+
+    document.getElementById('pg_prev')?.addEventListener('click', ()=>{
+      if (ui.page>1){ ui.page--; saveState(); renderList(); }
+    });
+    document.getElementById('pg_next')?.addEventListener('click', ()=>{
+      const pages2 = Math.max(1, Math.ceil(getFiltered().length / ui.perPage));
+      if (ui.page<pages2){ ui.page++; saveState(); renderList(); }
+    });
+
+    // Open profile
+    mainContent.querySelectorAll('[data-open]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        openProfile(a.getAttribute('data-open'));
+      });
+    });
+
+    // Add candidate
+    document.getElementById('cand_add').addEventListener('click', ()=>{
       const id = `cand-${Date.now()}`;
       const created = new Date().toISOString();
       const c = {
@@ -186,11 +355,8 @@
       db.candidates.unshift(c);
       persistDB();
       ui.page = 1; ui.query = ''; saveState();
-      notify('Profil candidat nou creat (demo).', 'success');
       openProfile(id);
     });
-
-    if (window.lucide) { window.lucide.createIcons(); }
   }
 
   // ---------- Profil candidat ----------
@@ -236,7 +402,7 @@
     `;
 
     document.getElementById('back_to_list').addEventListener('click', ()=>{ ui.lastView='list'; saveState(); renderList(); });
-    document.getElementById('save_profile').addEventListener('click', ()=>{ persistDB(); notify('Modificările din profil au fost salvate.', 'success'); });
+    document.getElementById('save_profile').addEventListener('click', ()=>{ persistDB(); alert('Salvat!'); });
 
     const tabs = document.getElementById('tabs');
     tabs.addEventListener('click', (e)=>{
@@ -292,7 +458,7 @@
         c.notes = document.getElementById('pf_notes').value || '';
         c.history.push({ when: new Date().toISOString(), who:'Manager demo', action:'Profil actualizat' });
         persistDB();
-        notify('Profil candidat actualizat.', 'success');
+        alert('Profil salvat.');
       });
       return;
     }
@@ -401,7 +567,7 @@
         const clientName = (document.getElementById('pl_client').value||'').trim();
         const title = (document.getElementById('pl_title').value||'').trim() || 'Poziție';
         const stage = document.getElementById('pl_stage').value;
-        if (!clientName) { notify('Completează numele clientului.', 'warn'); return; }
+        if (!clientName) { alert('Completează numele clientului.'); return; }
 
         // dacă numele introdus începe cu literele unui client existent, îl „snap-uim” pe acela
         const snap = db.clients.find(x => x.toLowerCase().startsWith(clientName.toLowerCase()));
@@ -449,7 +615,7 @@
         };
         c.history.push({ when:new Date().toISOString(), who:'Manager demo', action:'Financiar actualizat' });
         persistDB();
-        notify('Date financiare salvate.', 'success');
+        alert('Date financiare salvate.');
       });
       return;
     }
