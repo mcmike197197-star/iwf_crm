@@ -1,80 +1,114 @@
-/* === IWF CRM — UI 2025 Redesign === */
-
+/* === GLOBAL === */
 :root {
   --brand: #a62091;
-  --brand-dark: #6b1c75;
-  --bg: #f6f4f8;
-  --text: #1f1f1f;
-  --muted: #6b7280;
-  --card: #ffffff;
-  --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  --radius: 10px;
-  --transition: all 0.25s ease;
+  --bg: #111218;
+  --sidebar-bg: linear-gradient(180deg, #a62091, #5e2b97);
+  --text-light: #f5f5f5;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.12);
 }
 
-/* RESET */
 * {
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  transition: var(--transition);
 }
 
-html, body {
+body {
   margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden !important;
-  background: var(--bg);
-  color: var(--text);
-  height: 100%;
+  font-family: "Poppins", Arial, sans-serif;
+  background: radial-gradient(circle at 30% 20%, rgba(166, 32, 145, 0.35), transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(94, 43, 151, 0.25), transparent 40%), var(--bg);
+  color: var(--text-light);
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* === LOGIN PAGE === */
+/* === LOGIN === */
 .login-wrap {
-  position: fixed !important;
-  inset: 0;
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top left, #2b0037, #000);
-  z-index: 9999 !important;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .login-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: rgba(255,255,255,0.05);
-  border-radius: 20px;
-  box-shadow: 0 0 50px rgba(0,0,0,0.5);
-  width: 900px;
-  max-width: 90%;
-  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  width: 90%;
+  max-width: 950px;
+  background: rgba(30, 30, 36, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.1);
+  padding: 40px;
+}
+
+.login-card label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
 }
 
 .login-card input {
   width: 100%;
-  padding: 10px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 8px;
-  margin-top: 4px;
-  background: rgba(255,255,255,0.1);
   color: #fff;
+  font-size: 14px;
+}
+
+.login-card input:focus {
+  outline: 2px solid var(--brand);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .login-card .btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.login-card .btn:first-of-type {
   background: var(--brand);
   color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
 }
-.login-card .btn:hover {
-  background: #b82ba2;
+
+.login-card .btn:first-of-type:hover {
+  background: #b8329f;
   box-shadow: 0 0 12px rgba(166, 32, 145, 0.5);
+}
+
+.login-card .btn:last-of-type {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.login-card .btn:last-of-type:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.login-card, 
+.login-card * {
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+.login-card input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* === APP STRUCTURE === */
@@ -85,73 +119,73 @@ html, body {
   overflow: hidden;
 }
 
-/* === SIDEBAR MODERN === */
+.shell {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* === SIDEBAR === */
 .sidebar {
-  width: 250px;
-  background: linear-gradient(180deg, var(--brand), var(--brand-dark));
+  width: 220px;
+  background: var(--sidebar-bg);
   color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 0;
+  justify-content: flex-start;
   position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
-  height: 100vh;
-  box-shadow: 6px 0 16px rgba(0, 0, 0, 0.15);
-  z-index: 20;
+  z-index: 1000;
+  padding-bottom: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.3);
 }
 
-.sidebar .brand {
+.brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.brand-badge {
-  width: 40px;
-  height: 40px;
-  background: #fff;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sidebar h1 {
+.brand h1 {
   font-size: 16px;
   margin: 0;
-  font-weight: 700;
+}
+
+.brand .muted {
+  font-size: 13px;
+  opacity: 0.85;
 }
 
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px;
+  margin-top: 20px;
+  gap: 6px;
 }
 
 .nav button {
   background: rgba(255, 255, 255, 0.08);
-  border: none;
-  border-radius: var(--radius);
   color: #fff;
-  padding: 12px 16px;
-  text-align: left;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
   font-weight: 500;
-  font-size: 15px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin: 0 10px;
 }
 
 .nav button:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateX(6px);
+  transform: translateX(4px);
 }
 
 .nav button.active {
@@ -160,119 +194,57 @@ html, body {
   font-weight: 700;
 }
 
-/* === ICONS === */
-.nav svg {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-  stroke-width: 2;
-}
-
-/* === MAIN AREA === */
+/* === MAIN === */
 .main {
-  position: absolute;
-  left: 250px;
-  top: 0;
-  width: calc(100% - 250px);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--bg);
+  flex: 1;
+  margin-left: 220px;
+  background: #f6f4f8;
+  color: #1f2937;
+  overflow-y: auto;
+  padding-bottom: 50px;
+  position: relative;
+  z-index: 1;
 }
 
-/* === TOPBAR === */
 .topbar {
-  flex-shrink: 0;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--card);
-  box-shadow: var(--shadow);
-  padding: 18px 32px;
+  padding: 12px 20px;
   position: sticky;
   top: 0;
-  z-index: 5;
+  z-index: 900;
 }
 
-/* === TABLES & CONTENT === */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-th {
-  background: #fafafa;
-  color: #333;
-  font-weight: 600;
-  text-align: left;
-  padding: 10px 12px;
-  border-bottom: 2px solid #ddd;
-}
-td {
-  padding: 10px 12px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-}
-tr:hover td {
-  background: #fafafa;
-}
-
-/* === BUTTONS === */
-button, .btn {
-  background: var(--brand);
-  color: #fff !important;
-  border: none;
+.search input {
+  padding: 8px 10px;
   border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(166, 32, 145, 0.3);
-  transition: all 0.25s ease;
-}
-button:hover, .btn:hover {
-  background: #b82ba2;
-  box-shadow: 0 0 12px rgba(166, 32, 145, 0.4);
-  transform: translateY(-2px);
+  border: 1px solid #ddd;
 }
 
-/* === TEXT FIX === */
-body, .main, .content, table, td, th, h1, h2, h3, h4, h5, h6, p, span, div {
-  color: #1a1a1a !important;
-  opacity: 1 !important;
-  text-shadow: none !important;
+.content {
+  padding: 20px;
 }
 
-/* === ICON FIX === */
-i, svg {
-  color: var(--brand) !important;
-  fill: var(--brand) !important;
-  opacity: 1 !important;
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
 }
 
-/* === FULLWIDTH FIX === */
-html, body, .app, .main, .content {
-  max-width: 100% !important;
-  overflow-x: hidden !important;
+.card h2 {
+  margin-top: 0;
+  color: var(--brand);
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 900px) {
-  .sidebar {
-    width: 70px;
-  }
-  .sidebar h1, .nav button span {
-    display: none;
-  }
-  .nav button {
-    justify-content: center;
-    padding: 12px;
-  }
-  .main {
-    left: 70px;
-    width: calc(100% - 70px);
-  }
+/* === FIX LAYERING === */
+.sidebar {
+  z-index: 1000 !important;
+}
+.main {
+  z-index: 1;
 }
