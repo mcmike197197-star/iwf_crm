@@ -1,3 +1,4 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
 diff --git a/candidates.js b/candidates.js
 index 52c99893eb34aca019783c4b49fbc355cef3ddd7..c3a4c9db27d9d286e82006dcad5144f0d4f79f06 100644
 --- a/candidates.js
@@ -372,3 +373,6 @@ index 52c99893eb34aca019783c4b49fbc355cef3ddd7..c3a4c9db27d9d286e82006dcad5144f0
          placements: [], financial: { feeMultiplier: 1.3, net: 0, gross: null, fee: null }
        };
        db.candidates.unshift(c);
+ 
+EOF
+)
