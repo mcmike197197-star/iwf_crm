@@ -6,6 +6,10 @@
   const CAND_KEY = 'iwf_crm_v9_candidates';
   const mainContent = document.getElementById('main-content');
   const nav = document.querySelector('.nav');
+  const notify = (msg, tone='info') => {
+    if (window.IWF_APP?.showToast) window.IWF_APP.showToast(msg, tone);
+    else alert(msg);
+  };
 
   // Load data
   let dbClients = load(STORAGE_KEY) || seedClients();
@@ -98,7 +102,7 @@
       dbClients.unshift(cl);
       save(STORAGE_KEY,dbClients);
       renderList();
-      alert('Client adăugat');
+      notify('Client adăugat în demo.', 'success');
     });
   }
 
@@ -167,7 +171,7 @@
       const candId=document.getElementById('cand_sel').value;
       const stage=document.getElementById('cand_stage').value;
       const cand=dbCandidates.find(x=>x.id===candId);
-      if(!cand){alert('Alege un candidat');return;}
+      if(!cand){notify('Alege un candidat.', 'warn');return;}
 
       const p={id:'p-'+shortId(),candId,name:`${cand.firstName} ${cand.lastName}`,title:cand.title,stage};
       cl.proposed.push(p);
@@ -181,7 +185,7 @@
       save(CAND_KEY,candDB);
 
       openClient(cl.id);
-      alert('Candidat propus către client');
+      notify('Candidat propus către client.', 'success');
     });
   }
 
